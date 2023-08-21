@@ -3,6 +3,7 @@ package com.apirest.api.services.impl;
 import com.apirest.api.domain.User;
 import com.apirest.api.repositories.UserRepository;
 import com.apirest.api.services.UserService;
+import com.apirest.api.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(Long id) {
         Optional<User> userById = this.repository.findById(id);
-        return userById.orElse(null);
+        return userById.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
     }
 }
