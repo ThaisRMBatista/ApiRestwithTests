@@ -11,8 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ControllerExceptionHandlerTest {
@@ -42,6 +43,8 @@ class ControllerExceptionHandlerTest {
         assertEquals(StandardError.class, response.getBody().getClass());
         assertEquals(USUARIO_NAO_ENCONTRADO, response.getBody().getErrors());
         assertEquals(404, response.getBody().getStatus());
+        assertNotEquals("/users/2", response.getBody().getPath());
+        assertNotEquals(LocalDateTime.now(), response.getBody().getTimestamp());
     }
 
     @Test
