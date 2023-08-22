@@ -1,5 +1,6 @@
 package com.apirest.api.controllers.exceptions;
 
+import com.apirest.api.services.exceptions.DataIntegrityViolationException;
 import com.apirest.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class ControllerExceptionHandlerTest {
 
     public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
+    public static final String E_MAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail já cadastrado no sistema";
+
 
     @InjectMocks
     private ControllerExceptionHandler controllerExceptionHandler;
@@ -43,5 +46,16 @@ class ControllerExceptionHandlerTest {
 
     @Test
     void dataIntegrityViolation() {
+        ResponseEntity<StandardError> response = controllerExceptionHandler.dataIntegrityViolation(
+                new DataIntegrityViolationException(E_MAIL_JA_CADASTRADO_NO_SISTEMA),
+                new MockHttpServletRequest());
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(400, response.getBody().getStatus());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals(E_MAIL_JA_CADASTRADO_NO_SISTEMA, response.getBody().getErrors());
     }
 }
