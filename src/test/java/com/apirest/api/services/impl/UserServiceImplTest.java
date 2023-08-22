@@ -136,6 +136,14 @@ class UserServiceImplTest {
 
     @Test
     void whenUpdateThenADataIntegrityViolationException() {
+        when(repository.findByEmail(anyString())).thenThrow(new DataIntegrityViolationException(E_MAIL_JA_CADASTRADO_NO_SISTEMA));
+
+        try {
+            service.create(userDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(E_MAIL_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
+        }
     }
 
     @Test
